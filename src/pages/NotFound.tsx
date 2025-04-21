@@ -1,5 +1,10 @@
+
+import React from "react";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,14 +17,34 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
-      </div>
+    <div className="min-h-screen bg-dark-900 text-white flex flex-col">
+      <Header />
+      
+      <main className="flex-grow flex items-center justify-center">
+        <div className="text-center px-4 py-20">
+          <h1 className="text-6xl md:text-8xl font-display font-bold mb-4">
+            <span className="text-white">4</span>
+            <span className="bg-clip-text text-transparent bg-hive-gradient">0</span>
+            <span className="text-white">4</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-white/80 mb-8">
+            Oops! This stream doesn't exist
+          </p>
+          <p className="text-white/60 max-w-md mx-auto mb-8">
+            The page you're looking for might have been moved, deleted, or never existed.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button className="bg-hive-600 hover:bg-hive-700 text-black" onClick={() => window.location.href = '/'}>
+              Go Back Home
+            </Button>
+            <Button variant="outline">
+              Browse Movies
+            </Button>
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
     </div>
   );
 };
