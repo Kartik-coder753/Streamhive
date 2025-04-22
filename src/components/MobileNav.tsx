@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Search, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useAuth } from '@/contexts/AuthContext';
 
 interface MobileNavProps {
   isLoggedIn: boolean;
@@ -10,6 +11,8 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isLoggedIn, onClose }) => {
+  const { user, isSupabaseReady } = useAuth();
+  
   return (
     <div className="fixed inset-0 z-40 bg-dark-900/95 backdrop-blur-md pt-20 pb-6 px-4 animate-fade-in">
       <div className="flex flex-col h-full">
@@ -46,7 +49,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isLoggedIn, onClose }) => 
                 <User className="h-6 w-6 text-dark-900" />
               </div>
               <div>
-                <p className="font-medium">John Doe</p>
+                <p className="font-medium">{user?.email?.split('@')[0] || 'User'}</p>
                 <p className="text-sm text-white/70">Premium Plan</p>
               </div>
             </div>
@@ -55,13 +58,21 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isLoggedIn, onClose }) => 
               <Button 
                 variant="outline" 
                 className="w-full justify-center"
-                onClick={() => window.location.href = '/login'}
+                onClick={() => {
+                  onClose();
+                  // Navigate to login or open modal
+                }}
+                disabled={!isSupabaseReady}
               >
                 Sign In
               </Button>
               <Button 
                 className="w-full justify-center bg-hive-600 hover:bg-hive-700 text-black"
-                onClick={() => window.location.href = '/register'}
+                onClick={() => {
+                  onClose();
+                  // Navigate to register or open modal
+                }}
+                disabled={!isSupabaseReady}
               >
                 Sign Up
               </Button>

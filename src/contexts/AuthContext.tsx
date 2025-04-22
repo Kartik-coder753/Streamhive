@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { Session, User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { useToast } from '@/components/ui/use-toast'
 
 interface AuthContextType {
@@ -10,6 +10,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  isSupabaseReady: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -17,9 +18,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const [isSupabaseReady, setIsSupabaseReady] = useState(isSupabaseConfigured())
   const { toast } = useToast()
 
   useEffect(() => {
+    if (!isSupabaseReady) {
+      toast({
+        title: "Configuration Error",
+        description: "Supabase is not properly configured. Please check your environment variables.",
+        variant: "destructive",
+      })
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
@@ -33,9 +44,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [isSupabaseReady])
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseReady) {
+      toast({
+        title: "Cannot Sign In",
+        description: "Authentication is not available. Please check Supabase configuration.",
+        variant: "destructive",
+      })
+      return
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -57,6 +77,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string) => {
+    if (!isSupabaseReady) {
+      toast({
+        title: "Cannot Sign Up",
+        description: "Authentication is not available. Please check Supabase configuration.",
+        variant: "destructive",
+      })
+      return
+    }
+    
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -78,6 +107,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    if (!isSupabaseReady) {
+      return
+    }
+    
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
@@ -96,7 +129,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ session, user, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ 
+      session, 
+      user, 
+      signIn, 
+      signUp, 
+      signOut,
+      isSupabaseReady 
+    }}>
       {children}
     </AuthContext.Provider>
   )
