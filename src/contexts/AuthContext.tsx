@@ -25,7 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!isSupabaseReady) {
       toast({
         title: "Configuration Error",
-        description: "Supabase is not properly configured. Please check your environment variables.",
+        description: "Supabase is not properly configured. Please add your Supabase URL and anon key in project settings.",
         variant: "destructive",
       })
       return
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!isSupabaseReady) {
       toast({
         title: "Cannot Sign In",
-        description: "Authentication is not available. Please check Supabase configuration.",
+        description: "Authentication is not available. Please add Supabase configuration in project settings.",
         variant: "destructive",
       })
       return
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!isSupabaseReady) {
       toast({
         title: "Cannot Sign Up",
-        description: "Authentication is not available. Please check Supabase configuration.",
+        description: "Authentication is not available. Please add Supabase configuration in project settings.",
         variant: "destructive",
       })
       return
