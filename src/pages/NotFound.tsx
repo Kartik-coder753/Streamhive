@@ -1,12 +1,12 @@
 
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -34,11 +34,11 @@ const NotFound = () => {
             The page you're looking for might have been moved, deleted, or never existed.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button className="bg-hive-600 hover:bg-hive-700 text-black" onClick={() => window.location.href = '/'}>
-              Go Back Home
+            <Button className="bg-hive-600 hover:bg-hive-700 text-black" asChild>
+              <Link to="/">Go Back Home</Link>
             </Button>
-            <Button variant="outline">
-              Browse Movies
+            <Button variant="outline" asChild>
+              <Link to="/movies">Browse Movies</Link>
             </Button>
           </div>
         </div>
