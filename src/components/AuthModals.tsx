@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AuthModalsProps {
   isOpen: boolean;
@@ -22,26 +22,26 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const { toast } = useToast();
+  const { signIn, signUp } = useAuth();
   
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would authenticate with a backend
-    toast({
-      title: "Login Successful",
-      description: "Welcome back to STREAMHIVE!",
-    });
-    onClose();
+    try {
+      await signIn(email, password);
+      onClose();
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
   
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would register with a backend
-    toast({
-      title: "Registration Successful",
-      description: "Welcome to STREAMHIVE!",
-    });
-    onClose();
+    try {
+      await signUp(email, password);
+      onClose();
+    } catch (error) {
+      console.error('Registration error:', error);
+    }
   };
 
   return (
