@@ -1,5 +1,6 @@
 
 STREAMHIVE is a open streaming website where you can scroll through shows, search stuff, and log in to watch your favorites. It looks super slick, works on all screens, and has cool hover animations and banners. Made with HTML, Tailwind, and JavaScript—just open and vibe 🎬✨
+More Updates Coming Soon !!...
 
 ✅ Part 1: Setting Up STREAMHIVE in VS Code
 🧰 Prerequisites
